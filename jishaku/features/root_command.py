@@ -14,6 +14,7 @@ The jishaku root command.
 import math
 import sys
 import typing
+import os
 
 import discord
 from discord.ext import commands
@@ -51,7 +52,7 @@ class RootCommand(Feature):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.jsk.hidden = Flags.HIDE
-        self._use_embeds = Flags.USE_EMBEDS
+        self._use_embeds = os.environ.get("JISHAKU_USE_EMBEDS", 0)
 
     @Feature.Command(name="jishaku", aliases=["jsk"], invoke_without_command=True, ignore_extra=False)
     async def jsk(self, ctx: commands.Context):  # pylint: disable=too-many-branches
