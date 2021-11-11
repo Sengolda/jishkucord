@@ -125,4 +125,3 @@ class Flags(metaclass=FlagMeta):  # pylint: disable=too-few-public-methods
 
     # Flag to indicate usage of braille J in shutdown command
     USE_BRAILLE_J: bool
-
