@@ -149,3 +149,4 @@ logs/
 
 # Build outputs
 output/
+*DS_Store

@@ -21,9 +21,9 @@
 
 from jishaku.meta import __version__
 
-project = 'jishaku'
+project = 'jishkucode'
 copyright = '2021, Gorialis'
-author = 'Gorialis'
+author = 'Gorialis & Sengolda'
 
 # The short X.Y version
 version = __version__
@@ -120,7 +120,7 @@ html_static_path = ['_static']
 # -- Options for HTMLHelp output ---------------------------------------------
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'jishakudoc'
+htmlhelp_basename = 'jishkucodedoc'
 
 
 # -- Options for LaTeX output ------------------------------------------------
@@ -147,7 +147,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'jishaku.tex', 'jishaku Documentation',
+    (master_doc, 'jishkucode.tex', 'jishkucode Documentation',
      'Gorialis', 'manual'),
 ]
 
@@ -157,7 +157,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'jishaku', 'jishaku Documentation',
+    (master_doc, 'jishkucode', 'jishkucode Documentation',
      [author], 1)
 ]
 
@@ -168,8 +168,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'jishaku', 'jishaku Documentation',
-     author, 'jishaku', 'One line description of project.',
+    (master_doc, 'jishkucode', 'jishkucode Documentation',
+     author, 'jishkucode', 'One line description of project.',
      'Miscellaneous'),
 ]
 

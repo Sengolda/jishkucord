@@ -63,7 +63,7 @@ class RootCommand(Feature):
         """
 
         summary = [
-            f"Jishaku v{package_version('jishaku')}, pycord `{package_version('pycord')}`, "
+            f"Jishkucord v{package_version('jishkucord')}, pycord `{package_version('pycord')}`, "
             f"`Python {sys.version}` on `{sys.platform}`".replace("\n", ""),
             f"Module was loaded <t:{self.load_time.timestamp():.0f}:R>, "
             f"cog was loaded <t:{self.start_time.timestamp():.0f}:R>.",

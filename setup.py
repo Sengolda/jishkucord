@@ -44,9 +44,7 @@ with open(ROOT / "jishaku" / "meta.py", "r", encoding="utf-8") as f:
     if not VERSION_MATCH:
         raise RuntimeError("version is not set or could not be located")
 
-    VERSION = ".".join(
-        [VERSION_MATCH.group(1), VERSION_MATCH.group(2), VERSION_MATCH.group(3)]
-    )
+    VERSION = ".".join([VERSION_MATCH.group(1), VERSION_MATCH.group(2), VERSION_MATCH.group(3)])
 
 EXTRA_REQUIRES = {}
 
@@ -82,12 +80,7 @@ try:
             match = re.match(r"(\d).(\d).(\d)(a|b|rc)?", os.getenv("tag_name") or "")
 
             if (match and match[4]) or not match:
-                VERSION += (
-                    ("" if match else "a")
-                    + COMMIT_COUNT.decode("utf-8").strip()
-                    + "+g"
-                    + COMMIT_HASH.decode("utf-8").strip()
-                )
+                VERSION += ("" if match else "a") + COMMIT_COUNT.decode("utf-8").strip() + "+g" + COMMIT_HASH.decode("utf-8").strip()
 
                 # Also attempt to retrieve a branch, when applicable
                 PROCESS = subprocess.Popen(
@@ -99,9 +92,7 @@ try:
                 COMMIT_BRANCH, ERR = PROCESS.communicate()
 
                 if COMMIT_BRANCH:
-                    VERSION += "." + re.sub(
-                        "[^a-zA-Z0-9.]", ".", COMMIT_BRANCH.decode("utf-8").strip()
-                    )
+                    VERSION += "." + re.sub("[^a-zA-Z0-9.]", ".", COMMIT_BRANCH.decode("utf-8").strip())
 
 except FileNotFoundError:
     pass
@@ -110,34 +101,33 @@ except FileNotFoundError:
 with open(ROOT / "README.md", "r", encoding="utf-8") as f:
     README = f.read()
 
+packages = [
+    "jishaku",
+    "jishaku.features",
+    "jishaku.repl",
+    "jishaku.shim",
+]
 
 setup(
     name="jishkucord",
     author="Devon (Gorialis) R & Sengolda",
-    url="https://github.com/Gorialis/jishkucord",
+    url="https://github.com/Sengolda/jishkucord/",
     license="MIT",
     description="A py-cord extension including useful tools for bot development and debugging.",
     long_description=README,
     long_description_content_type="text/markdown",
     project_urls={
         "Documentation": "https://jishkucord.readthedocs.io/en/latest/",
-        "Code": "https://github.com/Gorialis/jishkucord",
-        "Issue tracker": "https://github.com/Gorialis/jishkucord/issues",
+        "Code": "https://github.com/Sengolda/jishkucord/",
+        "Issue tracker": "https://github.com/Sengolda/jishkucord/issues/",
     },
     version=VERSION,
-    packages=[
-        "jishaku",
-        "jishaku.features",
-        "jishaku.repl",
-        "jishaku.shim",
-    ],
+    packages=packages,
     include_package_data=True,
     install_requires=REQUIREMENTS,
     python_requires=">=3.8.0",
     extras_require=EXTRA_REQUIRES,
-    download_url="https://github.com/Gorialis/jishkucord/archive/{}.tar.gz".format(
-        VERSION
-    ),
+    download_url="https://github.com/Sengolda/jishkucord/archive/{}.tar.gz".format(VERSION),
     keywords="jishkucord discord.py discord cog repl extension",
     classifiers=[
         "Development Status :: 5 - Production/Stable",
