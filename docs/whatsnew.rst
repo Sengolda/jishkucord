@@ -3,6 +3,11 @@
 What's new?
 ================
 
+Version 2.5.0
+--------------
+This adds embed support.
+You can enable it by doing ``os.environ['JISHAKU_USE_EMBEDS'] = '1'``
+
 Version 2.3.1
 -------------
 

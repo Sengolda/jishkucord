@@ -12,9 +12,9 @@ The jishaku root command.
 """
 
 import math
+import os
 import sys
 import typing
-import os
 
 import discord
 from discord.ext import commands
@@ -139,7 +139,6 @@ class RootCommand(Feature):
         if self._use_embeds:
             em = discord.Embed()
             em.description = "\n".join(summary)
-            em.color = discord.Color(self.embed_color)
             return await ctx.send(embed=em)
         else:
             await ctx.send("\n".join(summary))

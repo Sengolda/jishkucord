@@ -22,13 +22,7 @@ from jishaku.features.baseclass import Feature
 from jishaku.flags import Flags
 from jishaku.functools import AsyncSender
 from jishaku.paginators import PaginatorInterface, WrappedPaginator, use_file_check
-from jishaku.repl import (
-    AsyncCodeExecutor,
-    Scope,
-    all_inspections,
-    disassemble,
-    get_var_dict_from_ctx,
-)
+from jishaku.repl import AsyncCodeExecutor, Scope, all_inspections, disassemble, get_var_dict_from_ctx
 
 
 class PythonFeature(Feature):
