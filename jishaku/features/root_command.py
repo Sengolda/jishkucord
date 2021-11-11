@@ -51,6 +51,7 @@ class RootCommand(Feature):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.jsk.hidden = Flags.HIDE
+        self._use_embeds = Flags.USE_EMBEDS
 
     @Feature.Command(name="jishaku", aliases=["jsk"], invoke_without_command=True, ignore_extra=False)
     async def jsk(self, ctx: commands.Context):  # pylint: disable=too-many-branches
@@ -133,7 +134,12 @@ class RootCommand(Feature):
         # Show websocket latency in milliseconds
         summary.append(f"Average websocket latency: {round(self.bot.latency * 1000, 2)}ms")
 
-        await ctx.send("\n".join(summary))
+        if self._use_embeds:
+            em = discord.Embed()
+            em.description = "\n".join(summary)
+            return await ctx.send(embed=em)
+        else:
+            await ctx.send("\n".join(summary))
 
     # pylint: disable=no-member
     @Feature.Command(parent="jsk", name="hide")
