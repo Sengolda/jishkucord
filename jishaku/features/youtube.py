@@ -19,9 +19,9 @@ from jishaku.features.baseclass import Feature
 from jishaku.features.voice import VoiceFeature
 
 BASIC_OPTS = {
-    'format': 'webm[abr>0]/bestaudio/best',
-    'prefer_ffmpeg': True,
-    'quiet': True
+    "format": "webm[abr>0]/bestaudio/best",
+    "prefer_ffmpeg": True,
+    "quiet": True,
 }
 
 
@@ -33,7 +33,7 @@ class BasicYouTubeDLSource(discord.FFmpegPCMAudio):
     def __init__(self, url, download: bool = False):
         ytdl = youtube_dl.YoutubeDL(BASIC_OPTS)
         info = ytdl.extract_info(url, download=download)
-        super().__init__(info['url'])
+        super().__init__(info["url"])
 
 
 class YouTubeFeature(Feature):

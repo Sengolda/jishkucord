@@ -58,7 +58,7 @@ class PaginatorInterface:  # pylint: disable=too-many-instance-attributes
 
     def __init__(self, bot: commands.Bot, paginator: commands.Paginator, **kwargs):
         if not isinstance(paginator, commands.Paginator):
-            raise TypeError('paginator must be a commands.Paginator instance')
+            raise TypeError("paginator must be a commands.Paginator instance")
 
         self._display_page = 0
 
@@ -67,10 +67,10 @@ class PaginatorInterface:  # pylint: disable=too-many-instance-attributes
         self.message = None
         self.paginator = paginator
 
-        self.owner = kwargs.pop('owner', None)
-        self.emojis = kwargs.pop('emoji', EMOJI_DEFAULT)
-        self.timeout = kwargs.pop('timeout', 7200)
-        self.delete_message = kwargs.pop('delete_message', False)
+        self.owner = kwargs.pop("owner", None)
+        self.emojis = kwargs.pop("emoji", EMOJI_DEFAULT)
+        self.timeout = kwargs.pop("timeout", 7200)
+        self.delete_message = kwargs.pop("delete_message", False)
 
         self.sent_page_reactions = False
 
@@ -80,10 +80,7 @@ class PaginatorInterface:  # pylint: disable=too-many-instance-attributes
         self.close_exception: Exception = None
 
         if self.page_size > self.max_page_size:
-            raise ValueError(
-                f'Paginator passed has too large of a page size for this interface. '
-                f'({self.page_size} > {self.max_page_size})'
-            )
+            raise ValueError(f"Paginator passed has too large of a page size for this interface. " f"({self.page_size} > {self.max_page_size})")
 
     @property
     def pages(self):
@@ -95,7 +92,7 @@ class PaginatorInterface:  # pylint: disable=too-many-instance-attributes
         # pylint: disable=protected-access
         paginator_pages = list(self.paginator._pages)
         if len(self.paginator._current_page) > 1:
-            paginator_pages.append('\n'.join(self.paginator._current_page) + '\n' + (self.paginator.suffix or ''))
+            paginator_pages.append("\n".join(self.paginator._current_page) + "\n" + (self.paginator.suffix or ""))
         # pylint: enable=protected-access
 
         return paginator_pages
@@ -135,7 +132,7 @@ class PaginatorInterface:  # pylint: disable=too-many-instance-attributes
         If this exceeds `max_page_size`, an exception is raised upon instantiation.
         """
         page_count = self.page_count
-        return self.paginator.max_size + len(f'\nPage {page_count}/{page_count}')
+        return self.paginator.max_size + len(f"\nPage {page_count}/{page_count}")
 
     @property
     def send_kwargs(self) -> dict:
@@ -147,9 +144,9 @@ class PaginatorInterface:  # pylint: disable=too-many-instance-attributes
         """
 
         display_page = self.display_page
-        page_num = f'\nPage {display_page + 1}/{self.page_count}'
+        page_num = f"\nPage {display_page + 1}/{self.page_count}"
         content = self.pages[display_page] + page_num
-        return {'content': content}
+        return {"content": content}
 
     async def add_line(self, *args, **kwargs):
         """
@@ -255,16 +252,17 @@ class PaginatorInterface:  # pylint: disable=too-many-instance-attributes
                 payload.message_id == self.message.id,
                 emoji,
                 emoji in self.emojis,
-                payload.user_id != self.bot.user.id
+                payload.user_id != self.bot.user.id,
             )
 
             return all(tests)
 
         task_list = [
-            self.bot.loop.create_task(coro) for coro in {
-                self.bot.wait_for('raw_reaction_add', check=check),
-                self.bot.wait_for('raw_reaction_remove', check=check),
-                self.send_lock_delayed()
+            self.bot.loop.create_task(coro)
+            for coro in {
+                self.bot.wait_for("raw_reaction_add", check=check),
+                self.bot.wait_for("raw_reaction_remove", check=check),
+                self.send_lock_delayed(),
             }
         ]
 
@@ -299,14 +297,10 @@ class PaginatorInterface:  # pylint: disable=too-many-instance-attributes
                         elif emoji == forward:
                             self._display_page += 1
 
-                        if payload.event_type == 'REACTION_ADD':
-                            task_list.append(self.bot.loop.create_task(
-                                self.bot.wait_for('raw_reaction_add', check=check)
-                            ))
-                        elif payload.event_type == 'REACTION_REMOVE':
-                            task_list.append(self.bot.loop.create_task(
-                                self.bot.wait_for('raw_reaction_remove', check=check)
-                            ))
+                        if payload.event_type == "REACTION_ADD":
+                            task_list.append(self.bot.loop.create_task(self.bot.wait_for("raw_reaction_add", check=check)))
+                        elif payload.event_type == "REACTION_REMOVE":
+                            task_list.append(self.bot.loop.create_task(self.bot.wait_for("raw_reaction_remove", check=check)))
                     else:
                         # Send lock was released
                         task_list.append(self.bot.loop.create_task(self.send_lock_delayed()))
@@ -351,15 +345,15 @@ class PaginatorEmbedInterface(PaginatorInterface):
     """
 
     def __init__(self, *args, **kwargs):
-        self._embed = kwargs.pop('embed', None) or discord.Embed()
+        self._embed = kwargs.pop("embed", None) or discord.Embed()
         super().__init__(*args, **kwargs)
 
     @property
     def send_kwargs(self) -> dict:
         display_page = self.display_page
         self._embed.description = self.pages[display_page]
-        self._embed.set_footer(text=f'Page {display_page + 1}/{self.page_count}')
-        return {'embed': self._embed}
+        self._embed.set_footer(text=f"Page {display_page + 1}/{self.page_count}")
+        return {"embed": self._embed}
 
     max_page_size = 2048
 

@@ -22,7 +22,13 @@ from jishaku.features.baseclass import Feature
 from jishaku.flags import Flags
 from jishaku.functools import AsyncSender
 from jishaku.paginators import PaginatorInterface, WrappedPaginator, use_file_check
-from jishaku.repl import AsyncCodeExecutor, Scope, all_inspections, disassemble, get_var_dict_from_ctx
+from jishaku.repl import (
+    AsyncCodeExecutor,
+    Scope,
+    all_inspections,
+    disassemble,
+    get_var_dict_from_ctx,
+)
 
 
 class PythonFeature(Feature):
@@ -102,7 +108,7 @@ class PythonFeature(Feature):
 
         # Eventually the below handling should probably be put somewhere else
         if len(result) <= 2000:
-            if result.strip() == '':
+            if result.strip() == "":
                 result = "\u200b"
 
             return await ctx.send(result.replace(self.bot.http.token, "[token omitted]"))
@@ -113,14 +119,11 @@ class PythonFeature(Feature):
             # Since this avoids escape issues and is more intuitive than pagination for
             #  long results, it will now be prioritized over PaginatorInterface if the
             #  resultant content is below the filesize threshold
-            return await ctx.send(file=discord.File(
-                filename="output.py",
-                fp=io.BytesIO(result.encode('utf-8'))
-            ))
+            return await ctx.send(file=discord.File(filename="output.py", fp=io.BytesIO(result.encode("utf-8"))))
 
         # inconsistency here, results get wrapped in codeblocks when they are too large
         #  but don't if they're not. probably not that bad, but noting for later review
-        paginator = WrappedPaginator(prefix='```py', suffix='```', max_size=1985)
+        paginator = WrappedPaginator(prefix="```py", suffix="```", max_size=1985)
 
         paginator.add_line(result)
 
@@ -153,7 +156,11 @@ class PythonFeature(Feature):
         finally:
             scope.clear_intersection(arg_dict)
 
-    @Feature.Command(parent="jsk", name="py_inspect", aliases=["pyi", "python_inspect", "pythoninspect"])
+    @Feature.Command(
+        parent="jsk",
+        name="py_inspect",
+        aliases=["pyi", "python_inspect", "pythoninspect"],
+    )
     async def jsk_python_inspect(self, ctx: commands.Context, *, argument: codeblock_converter):  # pylint: disable=too-many-locals
         """
         Evaluation of Python code with inspect information.
@@ -184,10 +191,14 @@ class PythonFeature(Feature):
                         text = "\n".join(lines)
 
                         if use_file_check(ctx, len(text)):  # File "full content" preview limit
-                            send(await ctx.send(file=discord.File(
-                                filename="inspection.prolog",
-                                fp=io.BytesIO(text.encode('utf-8'))
-                            )))
+                            send(
+                                await ctx.send(
+                                    file=discord.File(
+                                        filename="inspection.prolog",
+                                        fp=io.BytesIO(text.encode("utf-8")),
+                                    )
+                                )
+                            )
                         else:
                             paginator = WrappedPaginator(prefix="```prolog", max_size=1985)
 
@@ -210,12 +221,9 @@ class PythonFeature(Feature):
             text = "\n".join(disassemble(argument.content, arg_dict=arg_dict))
 
             if use_file_check(ctx, len(text)):  # File "full content" preview limit
-                await ctx.send(file=discord.File(
-                    filename="dis.py",
-                    fp=io.BytesIO(text.encode('utf-8'))
-                ))
+                await ctx.send(file=discord.File(filename="dis.py", fp=io.BytesIO(text.encode("utf-8"))))
             else:
-                paginator = WrappedPaginator(prefix='```py', max_size=1985)
+                paginator = WrappedPaginator(prefix="```py", max_size=1985)
 
                 paginator.add_line(text)
 

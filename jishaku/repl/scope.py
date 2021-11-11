@@ -30,7 +30,7 @@ class Scope:
         scope = Scope({'a': 3})  # a Scope with a pre-existing global scope key, and an empty local scope.
     """
 
-    __slots__ = ('globals', 'locals')
+    __slots__ = ("globals", "locals")
 
     def __init__(self, globals_: dict = None, locals_: dict = None):
         self.globals: dict = globals_ or {}
@@ -134,7 +134,7 @@ def get_parent_scope_from_var(name, global_ok=False, skip_frames=0) -> typing.Op
 
     stack = inspect.stack()
     try:
-        for frame_info in stack[skip_frames + 1:]:
+        for frame_info in stack[skip_frames + 1 :]:
             frame = None
 
             try:

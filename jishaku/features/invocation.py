@@ -37,7 +37,7 @@ class SlimUserConverter(UserIDConverter):  # pylint: disable=too-few-public-meth
 
     async def convert(self, ctx: commands.Context, argument: str) -> discord.User:
         """Converter method"""
-        match = self._get_id_match(argument) or re.match(r'<@!?([0-9]{15,20})>$', argument)
+        match = self._get_id_match(argument) or re.match(r"<@!?([0-9]{15,20})>$", argument)
 
         if match is not None:
             user_id = int(match.group(1))
@@ -58,16 +58,22 @@ class InvocationFeature(Feature):
     Feature containing the command invocation related commands
     """
 
-    if hasattr(discord, 'Thread'):
+    if hasattr(discord, "Thread"):
         OVERRIDE_SIGNATURE = typing.Union[SlimUserConverter, discord.TextChannel, discord.Thread]  # pylint: disable=no-member
     else:
         OVERRIDE_SIGNATURE = typing.Union[SlimUserConverter, discord.TextChannel]
 
-    @Feature.Command(parent="jsk", name="override", aliases=["execute", "exec", "override!", "execute!", "exec!"])
+    @Feature.Command(
+        parent="jsk",
+        name="override",
+        aliases=["execute", "exec", "override!", "execute!", "exec!"],
+    )
     async def jsk_override(
-        self, ctx: commands.Context,
+        self,
+        ctx: commands.Context,
         overrides: commands.Greedy[OVERRIDE_SIGNATURE],
-        *, command_string: str
+        *,
+        command_string: str,
     ):
         """
         Run a command with a different user, channel, or thread, optionally bypassing checks and cooldowns.
@@ -75,9 +81,7 @@ class InvocationFeature(Feature):
         Users will try to resolve to a Member, but will use a User if it can't find one.
         """
 
-        kwargs = {
-            "content": ctx.prefix + command_string.lstrip('/')
-        }
+        kwargs = {"content": ctx.prefix + command_string.lstrip("/")}
 
         for override in overrides:
             if isinstance(override, discord.User):
@@ -102,10 +106,10 @@ class InvocationFeature(Feature):
 
         if alt_ctx.command is None:
             if alt_ctx.invoked_with is None:
-                return await ctx.send('This bot has been hard-configured to ignore this user.')
+                return await ctx.send("This bot has been hard-configured to ignore this user.")
             return await ctx.send(f'Command "{alt_ctx.invoked_with}" is not found')
 
-        if ctx.invoked_with.endswith('!'):
+        if ctx.invoked_with.endswith("!"):
             return await alt_ctx.command.reinvoke(alt_ctx)
 
         return await alt_ctx.command.invoke(alt_ctx)
@@ -171,17 +175,14 @@ class InvocationFeature(Feature):
             pass
 
         # getsourcelines for some reason returns WITH line endings
-        source_text = ''.join(source_lines)
+        source_text = "".join(source_lines)
 
         if use_file_check(ctx, len(source_text)):  # File "full content" preview limit
-            await ctx.send(file=discord.File(
-                filename=filename,
-                fp=io.BytesIO(source_text.encode('utf-8'))
-            ))
+            await ctx.send(file=discord.File(filename=filename, fp=io.BytesIO(source_text.encode("utf-8"))))
         else:
-            paginator = WrappedPaginator(prefix='```py', suffix='```', max_size=1985)
+            paginator = WrappedPaginator(prefix="```py", suffix="```", max_size=1985)
 
-            paginator.add_line(source_text.replace('```', '``\N{zero width space}`'))
+            paginator.add_line(source_text.replace("```", "``\N{zero width space}`"))
 
             interface = PaginatorInterface(ctx.bot, paginator, owner=ctx.author)
             await interface.send_to(ctx)

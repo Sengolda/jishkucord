@@ -45,29 +45,21 @@ class KeywordTransformer(ast.NodeTransformer):
             test=ast.NameConstant(
                 value=True,  # if True; aka unconditional, will be optimized out
                 lineno=node.lineno,
-                col_offset=node.col_offset
+                col_offset=node.col_offset,
             ),
             body=[
                 # yield the value to be returned
                 ast.Expr(
-                    value=ast.Yield(
-                        value=node.value,
-                        lineno=node.lineno,
-                        col_offset=node.col_offset
-                    ),
+                    value=ast.Yield(value=node.value, lineno=node.lineno, col_offset=node.col_offset),
                     lineno=node.lineno,
-                    col_offset=node.col_offset
+                    col_offset=node.col_offset,
                 ),
                 # return valuelessly
-                ast.Return(
-                    value=None,
-                    lineno=node.lineno,
-                    col_offset=node.col_offset
-                )
+                ast.Return(value=None, lineno=node.lineno, col_offset=node.col_offset),
             ],
             orelse=[],
             lineno=node.lineno,
-            col_offset=node.col_offset
+            col_offset=node.col_offset,
         )
 
     def visit_Delete(self, node):
@@ -96,31 +88,24 @@ class KeywordTransformer(ast.NodeTransformer):
             test=ast.NameConstant(
                 value=True,  # if True; aka unconditional, will be optimized out
                 lineno=node.lineno,
-                col_offset=node.col_offset
+                col_offset=node.col_offset,
             ),
             body=[
                 ast.If(
                     # if 'x' in globals():
                     test=ast.Compare(
                         # 'x'
-                        left=ast.Str(
-                            s=target.id,
-                            lineno=node.lineno,
-                            col_offset=node.col_offset
-                        ),
+                        left=ast.Str(s=target.id, lineno=node.lineno, col_offset=node.col_offset),
                         ops=[
                             # in
-                            ast.In(
-                                lineno=node.lineno,
-                                col_offset=node.col_offset
-                            )
+                            ast.In(lineno=node.lineno, col_offset=node.col_offset)
                         ],
                         comparators=[
                             # globals()
                             self.globals_call(node)
                         ],
                         lineno=node.lineno,
-                        col_offset=node.col_offset
+                        col_offset=node.col_offset,
                     ),
                     body=[
                         ast.Expr(
@@ -129,25 +114,25 @@ class KeywordTransformer(ast.NodeTransformer):
                                 # globals().pop
                                 func=ast.Attribute(
                                     value=self.globals_call(node),
-                                    attr='pop',
+                                    attr="pop",
                                     ctx=ast.Load(),
                                     lineno=node.lineno,
-                                    col_offset=node.col_offset
+                                    col_offset=node.col_offset,
                                 ),
                                 args=[
                                     # 'x'
                                     ast.Str(
                                         s=target.id,
                                         lineno=node.lineno,
-                                        col_offset=node.col_offset
+                                        col_offset=node.col_offset,
                                     )
                                 ],
                                 keywords=[],
                                 lineno=node.lineno,
-                                col_offset=node.col_offset
+                                col_offset=node.col_offset,
                             ),
                             lineno=node.lineno,
-                            col_offset=node.col_offset
+                            col_offset=node.col_offset,
                         )
                     ],
                     # else:
@@ -156,24 +141,20 @@ class KeywordTransformer(ast.NodeTransformer):
                         ast.Delete(
                             targets=[target],
                             lineno=node.lineno,
-                            col_offset=node.col_offset
+                            col_offset=node.col_offset,
                         )
                     ],
                     lineno=node.lineno,
-                    col_offset=node.col_offset
+                    col_offset=node.col_offset,
                 )
-                if isinstance(target, ast.Name) else
-                ast.Delete(
-                    targets=[target],
-                    lineno=node.lineno,
-                    col_offset=node.col_offset
-                )
+                if isinstance(target, ast.Name)
+                else ast.Delete(targets=[target], lineno=node.lineno, col_offset=node.col_offset)
                 # for each target to be deleted, e.g. `del {x}, {y}, {z}`
                 for target in node.targets
             ],
             orelse=[],
             lineno=node.lineno,
-            col_offset=node.col_offset
+            col_offset=node.col_offset,
         )
 
     def globals_call(self, node):
@@ -183,13 +164,13 @@ class KeywordTransformer(ast.NodeTransformer):
 
         return ast.Call(
             func=ast.Name(
-                id='globals',
+                id="globals",
                 ctx=ast.Load(),
                 lineno=node.lineno,
-                col_offset=node.col_offset
+                col_offset=node.col_offset,
             ),
             args=[],
             keywords=[],
             lineno=node.lineno,
-            col_offset=node.col_offset
+            col_offset=node.col_offset,
         )

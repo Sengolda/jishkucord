@@ -36,7 +36,7 @@ def natural_size(size_in_bytes: int):
         1024 -> 1.00 KiB
         12345678 -> 11.77 MiB
     """
-    units = ('B', 'KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB')
+    units = ("B", "KiB", "MiB", "GiB", "TiB", "PiB", "EiB", "ZiB", "YiB")
 
     power = int(math.log(size_in_bytes, 1024))
 
@@ -52,8 +52,7 @@ class RootCommand(Feature):
         super().__init__(*args, **kwargs)
         self.jsk.hidden = Flags.HIDE
 
-    @Feature.Command(name="jishaku", aliases=["jsk"],
-                     invoke_without_command=True, ignore_extra=False)
+    @Feature.Command(name="jishaku", aliases=["jsk"], invoke_without_command=True, ignore_extra=False)
     async def jsk(self, ctx: commands.Context):  # pylint: disable=too-many-branches
         """
         The Jishaku debug and diagnostic commands.
@@ -65,9 +64,8 @@ class RootCommand(Feature):
         summary = [
             f"Jishkucord v{package_version('jishkucord')}, pycord `{package_version('pycord')}`, "
             f"`Python {sys.version}` on `{sys.platform}`".replace("\n", ""),
-            f"Module was loaded <t:{self.load_time.timestamp():.0f}:R>, "
-            f"cog was loaded <t:{self.start_time.timestamp():.0f}:R>.",
-            ""
+            f"Module was loaded <t:{self.load_time.timestamp():.0f}:R>, " f"cog was loaded <t:{self.start_time.timestamp():.0f}:R>.",
+            "",
         ]
 
         # detect if [procinfo] feature is installed
@@ -78,9 +76,11 @@ class RootCommand(Feature):
                 with proc.oneshot():
                     try:
                         mem = proc.memory_full_info()
-                        summary.append(f"Using {natural_size(mem.rss)} physical memory and "
-                                       f"{natural_size(mem.vms)} virtual memory, "
-                                       f"{natural_size(mem.uss)} of which unique to this process.")
+                        summary.append(
+                            f"Using {natural_size(mem.rss)} physical memory and "
+                            f"{natural_size(mem.vms)} virtual memory, "
+                            f"{natural_size(mem.uss)} of which unique to this process."
+                        )
                     except psutil.AccessDenied:
                         pass
 
@@ -95,10 +95,7 @@ class RootCommand(Feature):
 
                     summary.append("")  # blank line
             except psutil.AccessDenied:
-                summary.append(
-                    "psutil is installed, but this process does not have high enough access rights "
-                    "to query process information."
-                )
+                summary.append("psutil is installed, but this process does not have high enough access rights " "to query process information.")
                 summary.append("")  # blank line
 
         cache_summary = f"{len(self.bot.guilds)} guild(s) and {len(self.bot.users)} user(s)"
@@ -106,21 +103,12 @@ class RootCommand(Feature):
         # Show shard settings to summary
         if isinstance(self.bot, discord.AutoShardedClient):
             if len(self.bot.shards) > 20:
-                summary.append(
-                    f"This bot is automatically sharded ({len(self.bot.shards)} shards of {self.bot.shard_count})"
-                    f" and can see {cache_summary}."
-                )
+                summary.append(f"This bot is automatically sharded ({len(self.bot.shards)} shards of {self.bot.shard_count})" f" and can see {cache_summary}.")
             else:
-                shard_ids = ', '.join(str(i) for i in self.bot.shards.keys())
-                summary.append(
-                    f"This bot is automatically sharded (Shards {shard_ids} of {self.bot.shard_count})"
-                    f" and can see {cache_summary}."
-                )
+                shard_ids = ", ".join(str(i) for i in self.bot.shards.keys())
+                summary.append(f"This bot is automatically sharded (Shards {shard_ids} of {self.bot.shard_count})" f" and can see {cache_summary}.")
         elif self.bot.shard_count:
-            summary.append(
-                f"This bot is manually sharded (Shard {self.bot.shard_id} of {self.bot.shard_count})"
-                f" and can see {cache_summary}."
-            )
+            summary.append(f"This bot is manually sharded (Shard {self.bot.shard_id} of {self.bot.shard_count})" f" and can see {cache_summary}.")
         else:
             summary.append(f"This bot is not sharded and can see {cache_summary}.")
 
@@ -171,6 +159,7 @@ class RootCommand(Feature):
 
         self.jsk.hidden = False
         await ctx.send("Jishaku is now visible.")
+
     # pylint: enable=no-member
 
     @Feature.Command(parent="jsk", name="tasks")
@@ -185,8 +174,9 @@ class RootCommand(Feature):
         paginator = commands.Paginator(max_size=1985)
 
         for task in self.tasks:
-            paginator.add_line(f"{task.index}: `{task.ctx.command.qualified_name}`, invoked at "
-                               f"{task.ctx.message.created_at.strftime('%Y-%m-%d %H:%M:%S')} UTC")
+            paginator.add_line(
+                f"{task.index}: `{task.ctx.command.qualified_name}`, invoked at " f"{task.ctx.message.created_at.strftime('%Y-%m-%d %H:%M:%S')} UTC"
+            )
 
         interface = PaginatorInterface(ctx.bot, paginator, owner=ctx.author)
         return await interface.send_to(ctx)
@@ -225,5 +215,6 @@ class RootCommand(Feature):
                 return await ctx.send("Unknown task.")
 
         task.task.cancel()
-        return await ctx.send(f"Cancelled task {task.index}: `{task.ctx.command.qualified_name}`,"
-                              f" invoked at {task.ctx.message.created_at.strftime('%Y-%m-%d %H:%M:%S')} UTC")
+        return await ctx.send(
+            f"Cancelled task {task.index}: `{task.ctx.command.qualified_name}`," f" invoked at {task.ctx.message.created_at.strftime('%Y-%m-%d %H:%M:%S')} UTC"
+        )

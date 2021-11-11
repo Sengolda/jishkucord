@@ -39,27 +39,30 @@ class ManagementFeature(Feature):
         Reports any extensions that failed to load.
         """
 
-        paginator = WrappedPaginator(prefix='', suffix='')
+        paginator = WrappedPaginator(prefix="", suffix="")
 
         # 'jsk reload' on its own just reloads jishaku
-        if ctx.invoked_with == 'reload' and not extensions:
-            extensions = [['jishaku']]
+        if ctx.invoked_with == "reload" and not extensions:
+            extensions = [["jishaku"]]
 
         for extension in itertools.chain(*extensions):
             method, icon = (
-                (self.bot.reload_extension, "\N{CLOCKWISE RIGHTWARDS AND LEFTWARDS OPEN CIRCLE ARROWS}")
-                if extension in self.bot.extensions else
-                (self.bot.load_extension, "\N{INBOX TRAY}")
+                (
+                    self.bot.reload_extension,
+                    "\N{CLOCKWISE RIGHTWARDS AND LEFTWARDS OPEN CIRCLE ARROWS}",
+                )
+                if extension in self.bot.extensions
+                else (self.bot.load_extension, "\N{INBOX TRAY}")
             )
 
             try:
                 method(extension)
             except Exception as exc:  # pylint: disable=broad-except
-                traceback_data = ''.join(traceback.format_exception(type(exc), exc, exc.__traceback__, 1))
+                traceback_data = "".join(traceback.format_exception(type(exc), exc, exc.__traceback__, 1))
 
                 paginator.add_line(
                     f"{icon}\N{WARNING SIGN} `{extension}`\n```py\n{traceback_data}\n```",
-                    empty=True
+                    empty=True,
                 )
             else:
                 paginator.add_line(f"{icon} `{extension}`", empty=True)
@@ -75,7 +78,7 @@ class ManagementFeature(Feature):
         Reports any extensions that failed to unload.
         """
 
-        paginator = WrappedPaginator(prefix='', suffix='')
+        paginator = WrappedPaginator(prefix="", suffix="")
         icon = "\N{OUTBOX TRAY}"
 
         for extension in itertools.chain(*extensions):
@@ -86,7 +89,7 @@ class ManagementFeature(Feature):
 
                 paginator.add_line(
                     f"{icon}\N{WARNING SIGN} `{extension}`\n```py\n{traceback_data}\n```",
-                    empty=True
+                    empty=True,
                 )
             else:
                 paginator.add_line(f"{icon} `{extension}`", empty=True)
@@ -113,7 +116,7 @@ class ManagementFeature(Feature):
         If the names of permissions are provided, they are requested as part of the invite.
         """
 
-        scopes = ('bot', 'applications.commands')
+        scopes = ("bot", "applications.commands")
         permissions = discord.Permissions()
 
         for perm in perms:
@@ -127,12 +130,10 @@ class ManagementFeature(Feature):
         query = {
             "client_id": application_info.id,
             "scope": "+".join(scopes),
-            "permissions": permissions.value
+            "permissions": permissions.value,
         }
 
-        return await ctx.send(
-            f"Link to invite this bot:\n<https://discordapp.com/oauth2/authorize?{urlencode(query, safe='+')}>"
-        )
+        return await ctx.send(f"Link to invite this bot:\n<https://discordapp.com/oauth2/authorize?{urlencode(query, safe='+')}>")
 
     @Feature.Command(parent="jsk", name="rtt", aliases=["ping"])
     async def jsk_rtt(self, ctx: commands.Context):
