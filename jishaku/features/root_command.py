@@ -53,6 +53,7 @@ class RootCommand(Feature):
         super().__init__(*args, **kwargs)
         self.jsk.hidden = Flags.HIDE
         self._use_embeds = os.environ.get("JISHAKU_USE_EMBEDS", 0)
+        self.embed_color = os.environ.get("JISHAKU_EMBED_COLOR", 0)
 
     @Feature.Command(name="jishaku", aliases=["jsk"], invoke_without_command=True, ignore_extra=False)
     async def jsk(self, ctx: commands.Context):  # pylint: disable=too-many-branches
@@ -138,6 +139,10 @@ class RootCommand(Feature):
         if self._use_embeds:
             em = discord.Embed()
             em.description = "\n".join(summary)
+            if self.embed_color:
+                em.color = self.embed_color:
+            else:
+                pass
             return await ctx.send(embed=em)
         else:
             await ctx.send("\n".join(summary))
