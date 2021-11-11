@@ -140,7 +140,7 @@ class RootCommand(Feature):
             em = discord.Embed()
             em.description = "\n".join(summary)
             if self.embed_color:
-                em.color = int(self.embed_color)
+                em.color = discord.Color(self.embed_color)
             else:
                 pass
             return await ctx.send(embed=em)
