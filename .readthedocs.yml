@@ -1,0 +1,12 @@
+version: 2
+
+formats: []
+
+build:
+  image: latest
+
+requirements_file: .readthedocs/requirements.txt
+
+python:
+  version: '3.8'
+  setup_py_install: true
