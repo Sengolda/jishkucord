@@ -130,7 +130,7 @@ setup(
     python_requires=">=3.8.0",
     extras_require=EXTRA_REQUIRES,
     download_url="https://github.com/Sengolda/jishkucord/archive/{}.tar.gz".format(VERSION),
-    keywords="jishkucord discord.py & py-cord discord cog repl extension",
+    keywords="jishkucord, py-cord, discord, cog, repl, extension",
     classifiers=[
         "Development Status :: 5 - Production/Stable",
         "Framework :: AsyncIO",
