@@ -50,10 +50,10 @@ with open(ROOT / "jishaku" / "meta.py", "r", encoding="utf-8") as f:
 
 EXTRA_REQUIRES = {}
 
+
 for feature in (ROOT / "requirements").glob("*.txt"):
     with open(feature, "r", encoding="utf-8") as f:
         EXTRA_REQUIRES[feature.with_suffix("").name] = f.read().splitlines()
-
 REQUIREMENTS = EXTRA_REQUIRES.pop("_")
 
 if not VERSION:
@@ -130,7 +130,7 @@ setup(
     python_requires=">=3.8.0",
     extras_require=EXTRA_REQUIRES,
     download_url="https://github.com/Sengolda/jishkucord/archive/{}.tar.gz".format(VERSION),
-    keywords="jishkucord discord.py discord cog repl extension",
+    keywords="jishkucord discord.py & py-cord discord cog repl extension",
     classifiers=[
         "Development Status :: 5 - Production/Stable",
         "Framework :: AsyncIO",
