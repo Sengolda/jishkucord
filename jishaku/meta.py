@@ -27,7 +27,7 @@ __all__ = (
 
 # pylint: disable=invalid-name
 VersionInfo = namedtuple("VersionInfo", "major minor micro releaselevel serial")
-version_info = VersionInfo(major=2, minor=5, micro=1, releaselevel="final", serial=0)
+version_info = VersionInfo(major=2, minor=5, micro=2, releaselevel="final", serial=0)
 
 __author__ = "Gorialis"
 __copyright__ = "Copyright 2021 Devon (Gorialis) R"
@@ -35,7 +35,6 @@ __docformat__ = "restructuredtext en"
 __license__ = "MIT"
 __title__ = "jishaku"
 __version__ = ".".join(map(str, (version_info.major, version_info.minor, version_info.micro)))
-print(__version__)
 
 # This ensures that when jishaku is reloaded, pkg_resources requeries it to provide correct version info
 pkg_resources.working_set.by_key.pop("jishaku", None)
